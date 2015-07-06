@@ -6,77 +6,149 @@ require_relative 'monster'
 require_relative 'party'
 
 class Game
+  attr_reader :heroes
+
+  STOCK_HEROES = [ # Can be accessed OUTSIDE OF Game, with Game::STOCK_HEROES
+    Hero.new({
+      name: "Gimli",
+      hp: 50,
+      weapon: Weapon.new({
+        name: "Battle Axe",
+        damage: 9,
+        price: 25
+      })
+    }),
+
+    Hero.new({
+      name: "Legolas",
+      hp: 25,
+      weapon: Weapon.new({
+        name: "Longbow",
+        damage: 9,
+        price: 25
+      })
+    }),
+
+    Hero.new({
+      name: "Gandalf",
+      hp: 80,
+      weapon: Weapon.new({
+        name: "Magic Staff",
+        damage: 5,
+        price: 50
+      })
+    }),
+
+    Hero.new({
+      name: "Aragorn",
+      hp: 25,
+      weapon: Weapon.new({
+        name: "Longsword",
+        damage: 12,
+        price: 25
+      })
+    }),
+
+    Hero.new({
+      name: "Boromir",
+      hp: 20,
+      weapon: Weapon.new({
+        name: "Sword",
+        damage: 5,
+        price: 25
+      })
+    })
+  ]
+
+  STOCK_MONSTERS = [
+    Monster.new({
+      name: "Goblin",
+      hp: 19,
+      weapon: Weapon.new({
+        name: "Axe",
+        damage: 7,
+        price: 10
+      }),
+      xp: 7,
+      gold: 10
+    }),
+
+    Monster.new({
+      name: "Troll",
+      hp: 29,
+      weapon: Weapon.new({
+        name: "Club",
+        damage: 10,
+        price: 15
+      }),
+      xp: 20,
+      gold: 37
+    }),
+
+    Monster.new({
+      name: "Uruk-Hai",
+      hp: 75,
+      weapon: Weapon.new({
+        name: "Broad Sword",
+        damage: 15,
+        price: 150
+      }),
+      xp: 50,
+      gold: 87
+    })
+  ]
+
   def initialize
     @heroes = enlist_heroes
   end
 
   def enlist_heroes
-    # Display choices for heroes
-    # Prompt (gets) the user for choices e.g. 2, 6
-    # Create a part with those heroes in it and return it
+    show_heroes
 
-    def pick_heroes
-      puts <<-SELECT_HEROES
-      Greetings Hero! Please select 3 of the following characters to add to your party:
-          1. "Gimli"
-          2. "Gandalf"
-          3. "Legolas"
-          4. "Aragorn"
-          5. "Boromir"
-      Please enter all three at once separated by a space.
-      SELECT_HEROES
+    return get_heroes
+  end
+
+  def show_heroes
+    puts "Greetings Hero! Please select 3 of the following characters to add to your party:"
+
+    STOCK_HEROES.each_with_index do |hero, i|
+      puts "#{i + 1}. #{hero}"
+    end
+  end
+
+  def get_heroes
+    resp = []
+
+    while resp.count != 3
+      puts "Please enter all three at once separated by a space. (example: 1 2 4)"
+      print "> "
+      resp = gets.chomp.split(" ").uniq.map { |x| x.to_i - 1 }.sort
+      resp = [] if resp.first < 0 || resp.last >= STOCK_HEROES.length
     end
 
-    def gets_heroes
-      def get_heroes
-        resp = gets.chomp.split(" ")
+    # hero_party vs @hero_party since we don't need it once it's returned
+    hero_party = HeroParty.new
 
-        resp.each do |chosen_hero|
+    resp.each do |index|
+      hero_party.enroll(STOCK_HEROES[index])
+    end
 
-          if chosen_hero == "Gimli" || chosen_hero == "1"
-            if current_heroes.length < 4
-              current_heroes << gimli
-            else
-              puts "Your party is full."
-            end
-
-          elsif chosen_hero == "Gandalf" || chosen_hero == "2"
-            if current_heroes.length < 4
-              current_heroes << gandalf
-            else
-              puts "Your party is full."
-            end
-
-          elsif chosen_hero == "Legolas" || chosen_hero == "3"
-            if current_heroes.length < 4
-              current_heroes << legolas
-            else
-              puts "Your party is full."
-            end
-
-          elsif chosen_hero == "Aragorn" || chosen_hero == "4"
-            if current_heroes.length < 4
-              current_heroes << aragorn
-            else
-              puts "Your party is full."
-            end
-
-          elsif chosen_hero == "Boromir" || chosen_hero == "5"
-            if current_heroes.length < 4
-              current_heroes << boromir
-            else
-              puts "Your party is full."
-            end
-
-          else
-            get_heroes
-          end
-        end
-      end
+    # this is grabbed during initialize later
+    return hero_party
   end
 
   def enter_forest
-
+    # Make a random number from 1 to 3 => mp_size
+    # Create a new monster party, monsters
+    # mp_size.times { monsters.enroll(STOCK_MONSTERS.sample) }
+    # combatants = [@heroes, monsters]
+    # attackers, defenders = combatants
+    # while defenders.any?
+    #   attackers.attack(defenders)
+    #   combatants.rotate!
+    #   attackers, defenders = combatants if defenders.any?
+    # end
+    # puts defenders are dead...
   end
 
   def enter_shop
@@ -113,109 +185,26 @@ class Game
   end
 end
 
-gimli = Hero.new({
-  name: "Gimli",
-  hp: 50,
-  weapon: Weapon.new({
-    name: "Battle Axe",
-    damage: 9,
-    price: 25
-  })
-})
 
-gandalf = Hero.new({
-  name: "Gandalf",
-  hp: 80,
-  weapon: Weapon.new({
-    name: "Magic Staff",
-    damage: 5,
-    price: 50
-  })
-})
-
-legolas = Hero.new({
-  name: "Legolas",
-  hp: 25,
-  weapon: Weapon.new({
-    name: "Longbow",
-    damage: 9,
-    price: 25
-  })
-})
-
-aragorn = Hero.new({
-  name: "Aragorn",
-  hp: 25,
-  weapon: Weapon.new({
-    name: "Longsword",
-    damage: 12,
-    price: 25
-  })
-})
-
-boromir = Hero.new({
-  name: "Boromir",
-  hp: 20,
-  weapon: Weapon.new({
-    name: "Sword",
-    damage: 5,
-    price: 25
-  })
-})
-
-goblin = Monster.new({
-  name: "Goblin",
-  hp: 19,
-  weapon: Weapon.new({
-    name: "Axe",
-    damage: 7,
-    price: 10
-  }),
-  xp: 7,
-  gold: 10
-})
-
-troll = Monster.new({
-  name: "Troll",
-  hp: 29,
-  weapon: Weapon.new({
-    name: "Club",
-    damage: 10,
-    price: 15
-  }),
-  xp: 20,
-  gold: 37
-})
-
-urukhai = Monster.new({
-  name: "Uruk-Hai",
-  hp: 75,
-  weapon: Weapon.new({
-    name: "Broad Sword",
-    damage: 15,
-    price: 150
-  }),
-  xp: 50,
-  gold: 87
-})
-
-current_monsters = [troll, goblin, urukhai]
-current_heroes = []
-current_fighters = [current_heroes[0], current_monsters[0]]
-attacker = current_fighters.shift
-attackee = current_fighters.shift
-
-if current_heroes.length == 3
-  while attackee.is_alive?
-    attacker.attack(attackee)
-
-    puts "#{attacker} attacks #{attackee} with his #{attacker.weapon} for #{attacker.weapon.damage}.  #{attackee} now has #{attackee.current_hp} HP left."
-
-    attacker, attackee = attackee, attacker unless attackee.is_dead?
-  end
-end
-
-puts "#{attackee} is now dead..." end
+#
+# current_monsters = [troll, goblin, urukhai]
+# current_heroes = []
+# current_fighters = [current_heroes[0], current_monsters[0]]
+# attacker = current_fighters.shift
+# attackee = current_fighters.shift
+#
+# if current_heroes.length == 3
+#   while attackee.is_alive?
+#     attacker.attack(attackee)
+#
+#     puts "#{attacker} attacks #{attackee} with his #{attacker.weapon} for #{attacker.weapon.damage}.  #{attackee} now has #{attackee.current_hp} HP left."
+#
+#     attacker, attackee = attackee, attacker unless attackee.is_dead?
+#   end
+# end
+#
+# puts "#{attackee} is now dead..."
 
 g = Game.new
-g.enlist_heroes
+
+Pry.start(binding)
