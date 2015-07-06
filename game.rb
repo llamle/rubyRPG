@@ -139,6 +139,18 @@ class Game
   end
 
   def enter_forest
+    # Make a random number from 1 to 3 => mp_size
+    # Create a new monster party, monsters
+    # mp_size.times { monsters.enroll(STOCK_MONSTERS.sample) }
+    # combatants = [@heroes, monsters]
+    # attackers, defenders = combatants
+    # while defenders.any?
+    #   attackers.attack(defenders)
+    #   combatants.rotate!
+    #   attackers, defenders = combatants if defenders.any?
+    # end
+    # puts defenders are dead...
+
     mp_size = rand(1..3)
     monsters = []
     monsters_party = MonstersParty.new
@@ -153,7 +165,7 @@ class Game
 
     while defenders.any?
       attackers.attack(defenders)
-      combatants.rotate
+      combatants.rotate!
       attackers, defenders = combatants
       if defenders.any?
 
