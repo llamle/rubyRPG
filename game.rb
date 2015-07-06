@@ -4,46 +4,43 @@ require 'pry'
 require_relative 'hero'
 require_relative 'monster'
 require_relative 'party'
-
 class Game
   def initialize
+    print "hi \n"
     @heroes = enlist_heroes
   end
 
   def enlist_heroes
+    print "Greetings Hero! Please select 3 of the following characters to add to your party:
+        1. Gimli
+        2. Gandalf
+        3. Legolas
+        4. Aragorn
+        5. Boromir"
     # Display choices for heroes
     # Prompt (gets) the user for choices e.g. 2, 6
-    # Create a part with those heroes in it and return it
-
-    def pick_heroes
-      puts <<-SELECT_HEROES
-      Greetings Hero! Please select 3 of the following characters to add to your party:
-          1. "Gimli"
-          2. "Gandalf"
-          3. "Legolas"
-          4. "Aragorn"
-          5. "Boromir"
-      SELECT_HEROES
-    end
-
-    def gets_heroes
-      def get_location
-        resp = gets.chomp
-
-        if resp == "Gimli" || "1"
-          return
-        elsif resp == "Gandalf" ||"2"
-          return
-        elsif resp == "Legolas" || "3"
-          return
-        elsif resp == "Aragorn" || "4"
-          return
-        elsif resp == "Boromir" || "5"
-        else
-          pick_heroes
-        end
-      end
+    # Create a party with those heroes in it and return it
   end
+
+  def pick_heroes
+    resp = gets.chomp
+   end
+
+   def gets_heroes
+       resp = gets.chomp
+       if resp == "Gimli" ||resp == "1"
+         return
+       elsif resp == "Gandalf" ||resp =="2"
+         return
+       elsif resp == "Legolas" ||resp == "3"
+         return
+       elsif resp == "Aragorn" ||resp == "4"
+         return
+       elsif resp == "Boromir" ||resp == "5"
+       else
+         pick_heroes
+     end
+ end
 
   def enter_forest
 
@@ -82,6 +79,28 @@ class Game
     end
   end
 end
+
+artemis = Hero.new({
+  name: "Artemis",
+  hp: 20,
+  weapon: Weapon.new({
+    name: "longbow",
+    damage: 6,
+    price: 25
+  })
+})
+
+goblin = Monster.new({
+  name: "Goblin, father of 7",
+  hp: 9,
+  weapon: Weapon.new({
+    name: "his wife's rusty last kitchen knife",
+    damage: 1,
+    price: 1
+  }),
+  xp: 2,
+  gold: 1
+})
 
 gimli = Hero.new({
   name: "Gimli",
@@ -157,8 +176,8 @@ troll = Monster.new({
   gold: 37
 })
 
-uruk-hai = Monster.new({
-  name: "Uruk-Hai",
+urukhai = Monster.new({
+  name: "UrukHai",
   hp: 75,
   weapon: Weapon.new({
     name: "Broad Sword",
@@ -181,6 +200,6 @@ while attackee.is_alive?
   attacker, attackee = attackee, attacker unless attackee.is_dead?
 end
 
-puts "#{attackee} is now dead..." end
+puts "#{attackee} is now dead..."
 
 Pry.start(binding)
