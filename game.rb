@@ -4,42 +4,76 @@ require 'pry'
 require_relative 'hero'
 require_relative 'monster'
 require_relative 'party'
+
 class Game
   def initialize
     @heroes = enlist_heroes
   end
 
   def enlist_heroes
-    print "Greetings Hero! Please select 3 of the following characters to add to your party:
-        1. Gimli
-        2. Gandalf
-        3. Legolas
-        4. Aragorn
-        5. Boromir"
     # Display choices for heroes
     # Prompt (gets) the user for choices e.g. 2, 6
-    # Create a party with those heroes in it and return it
+    # Create a part with those heroes in it and return it
+
+    def pick_heroes
+      puts <<-SELECT_HEROES
+      Greetings Hero! Please select 3 of the following characters to add to your party:
+          1. "Gimli"
+          2. "Gandalf"
+          3. "Legolas"
+          4. "Aragorn"
+          5. "Boromir"
+      Please enter all three at once separated by a space.
+      SELECT_HEROES
+    end
+
+    def gets_heroes
+      def get_heroes
+        resp = gets.chomp.split(" ")
+
+        resp.each do |chosen_hero|
+
+          if chosen_hero == "Gimli" || chosen_hero == "1"
+            if current_heroes.length < 4
+              current_heroes << gimli
+            else
+              puts "Your party is full."
+            end
+
+          elsif chosen_hero == "Gandalf" || chosen_hero == "2"
+            if current_heroes.length < 4
+              current_heroes << gandalf
+            else
+              puts "Your party is full."
+            end
+
+          elsif chosen_hero == "Legolas" || chosen_hero == "3"
+            if current_heroes.length < 4
+              current_heroes << legolas
+            else
+              puts "Your party is full."
+            end
+
+          elsif chosen_hero == "Aragorn" || chosen_hero == "4"
+            if current_heroes.length < 4
+              current_heroes << aragorn
+            else
+              puts "Your party is full."
+            end
+
+          elsif chosen_hero == "Boromir" || chosen_hero == "5"
+            if current_heroes.length < 4
+              current_heroes << boromir
+            else
+              puts "Your party is full."
+            end
+
+          else
+            get_heroes
+          end
+        end
+      end
   end
-
-  def pick_heroes
-    resp = gets.chomp
-   end
-
-   def gets_heroes
-       resp = gets.chomp
-       if resp == "Gimli" ||resp == "1"
-         return
-       elsif resp == "Gandalf" ||resp =="2"
-         return
-       elsif resp == "Legolas" ||resp == "3"
-         return
-       elsif resp == "Aragorn" ||resp == "4"
-         return
-       elsif resp == "Boromir" ||resp == "5"
-       else
-         pick_heroes
-     end
- end
 
   def enter_forest
 
@@ -78,28 +112,6 @@ class Game
     end
   end
 end
-
-artemis = Hero.new({
-  name: "Artemis",
-  hp: 20,
-  weapon: Weapon.new({
-    name: "longbow",
-    damage: 6,
-    price: 25
-  })
-})
-
-goblin = Monster.new({
-  name: "Goblin, father of 7",
-  hp: 9,
-  weapon: Weapon.new({
-    name: "his wife's rusty last kitchen knife",
-    damage: 1,
-    price: 1
-  }),
-  xp: 2,
-  gold: 1
-})
 
 gimli = Hero.new({
   name: "Gimli",
@@ -176,7 +188,7 @@ troll = Monster.new({
 })
 
 urukhai = Monster.new({
-  name: "UrukHai",
+  name: "Uruk-Hai",
   hp: 75,
   weapon: Weapon.new({
     name: "Broad Sword",
@@ -187,18 +199,23 @@ urukhai = Monster.new({
   gold: 87
 })
 
-current_fighters = [artemis, goblin]
+current_monsters = [troll, goblin, urukhai]
+current_heroes = []
+current_fighters = [current_heroes[0], current_monsters[0]]
 attacker = current_fighters.shift
 attackee = current_fighters.shift
 
-while attackee.is_alive?
-  attacker.attack(attackee)
+if current_heroes.length == 3
+  while attackee.is_alive?
+    attacker.attack(attackee)
 
-  puts "#{attacker} attacks #{attackee} with his #{attacker.weapon} for #{attacker.weapon.damage}.  #{attackee} now has #{attackee.current_hp} HP left."
+    puts "#{attacker} attacks #{attackee} with his #{attacker.weapon} for #{attacker.weapon.damage}.  #{attackee} now has #{attackee.current_hp} HP left."
 
-  attacker, attackee = attackee, attacker unless attackee.is_dead?
+    attacker, attackee = attackee, attacker unless attackee.is_dead?
+  end
 end
 
-puts "#{attackee} is now dead..."
+puts "#{attackee} is now dead..." end
 
-Pry.start(binding)
+g = Game.new
+g.enlist_heroes
