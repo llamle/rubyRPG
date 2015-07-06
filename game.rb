@@ -6,7 +6,6 @@ require_relative 'monster'
 require_relative 'party'
 class Game
   def initialize
-    print "hi \n"
     @heroes = enlist_heroes
   end
 
