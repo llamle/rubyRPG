@@ -1,6 +1,6 @@
 class Party
   attr_reader :alive, :dead
-  
+
   def initialize
     @alive = []
     @dead = []

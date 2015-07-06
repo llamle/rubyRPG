@@ -134,21 +134,32 @@ class Game
     end
 
     # this is grabbed during initialize later
-    return hero_party
+    puts "#{hero_party.alive[0]}, #{hero_party.alive[1]}, 'and' #{hero_party.alive[2]} have joined your party."
+
   end
 
   def enter_forest
-    # Make a random number from 1 to 3 => mp_size
-    # Create a new monster party, monsters
-    # mp_size.times { monsters.enroll(STOCK_MONSTERS.sample) }
-    # combatants = [@heroes, monsters]
-    # attackers, defenders = combatants
-    # while defenders.any?
-    #   attackers.attack(defenders)
-    #   combatants.rotate!
-    #   attackers, defenders = combatants if defenders.any?
-    # end
-    # puts defenders are dead...
+    mp_size = rand(1..3)
+    monsters = []
+    monsters_party = MonstersParty.new
+
+    monsters.each do |index|
+      mp_size.times { monsters_party.enroll(STOCK_MONSTERS[index]) }
+    end
+    return monsters_party
+
+    combatants = [@heroes, monsters]
+    attackers, defenders = combatants
+
+    while defenders.any?
+      attackers.attack(defenders)
+      combatants.rotate
+      attackers, defenders = combatants
+      if defenders.any?
+
+      end
+      puts defenders " are dead..."
+    end
   end
 
   def enter_shop
