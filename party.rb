@@ -24,7 +24,7 @@ class HeroParty < Party
   end
 end
 
-class MonsterParty < Part
+class MonsterParty < Party
   def attack(opposing_party)
     # randomly choose a member of the opposing_party and attack it
   end

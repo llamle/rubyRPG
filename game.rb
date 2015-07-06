@@ -23,24 +23,54 @@ class Game
           3. "Legolas"
           4. "Aragorn"
           5. "Boromir"
+      Please enter all three at once separated by a space.
       SELECT_HEROES
     end
 
     def gets_heroes
-      def get_location
-        resp = gets.chomp
+      def get_heroes
+        resp = gets.chomp.split(" ")
 
-        if resp == "Gimli" || "1"
-          return
-        elsif resp == "Gandalf" ||"2"
-          return
-        elsif resp == "Legolas" || "3"
-          return
-        elsif resp == "Aragorn" || "4"
-          return
-        elsif resp == "Boromir" || "5"
-        else
-          pick_heroes
+        resp.each do |chosen_hero|
+
+          if chosen_hero == "Gimli" || chosen_hero == "1"
+            if current_heroes.length < 4
+              current_heroes << gimli
+            else
+              puts "Your party is full."
+            end
+
+          elsif chosen_hero == "Gandalf" || chosen_hero == "2"
+            if current_heroes.length < 4
+              current_heroes << gandalf
+            else
+              puts "Your party is full."
+            end
+
+          elsif chosen_hero == "Legolas" || chosen_hero == "3"
+            if current_heroes.length < 4
+              current_heroes << legolas
+            else
+              puts "Your party is full."
+            end
+
+          elsif chosen_hero == "Aragorn" || chosen_hero == "4"
+            if current_heroes.length < 4
+              current_heroes << aragorn
+            else
+              puts "Your party is full."
+            end
+
+          elsif chosen_hero == "Boromir" || chosen_hero == "5"
+            if current_heroes.length < 4
+              current_heroes << boromir
+            else
+              puts "Your party is full."
+            end
+
+          else
+            get_heroes
+          end
         end
       end
   end
@@ -157,7 +187,7 @@ troll = Monster.new({
   gold: 37
 })
 
-uruk-hai = Monster.new({
+urukhai = Monster.new({
   name: "Uruk-Hai",
   hp: 75,
   weapon: Weapon.new({
@@ -169,18 +199,23 @@ uruk-hai = Monster.new({
   gold: 87
 })
 
-current_fighters = [artemis, goblin]
+current_monsters = [troll, goblin, urukhai]
+current_heroes = []
+current_fighters = [current_heroes[0], current_monsters[0]]
 attacker = current_fighters.shift
 attackee = current_fighters.shift
 
-while attackee.is_alive?
-  attacker.attack(attackee)
+if current_heroes.length == 3
+  while attackee.is_alive?
+    attacker.attack(attackee)
 
-  puts "#{attacker} attacks #{attackee} with his #{attacker.weapon} for #{attacker.weapon.damage}.  #{attackee} now has #{attackee.current_hp} HP left."
+    puts "#{attacker} attacks #{attackee} with his #{attacker.weapon} for #{attacker.weapon.damage}.  #{attackee} now has #{attackee.current_hp} HP left."
 
-  attacker, attackee = attackee, attacker unless attackee.is_dead?
+    attacker, attackee = attackee, attacker unless attackee.is_dead?
+  end
 end
 
 puts "#{attackee} is now dead..." end
 
-Pry.start(binding)
+g = Game.new
+g.enlist_heroes
